@@ -18,4 +18,8 @@ class QuestionnaireController < ApplicationController
 
     redirect_to questionnaire_index_path
   end
+
+  def show
+    @questionnaire = Questionnaire.find(params[:id])
+  end
 end

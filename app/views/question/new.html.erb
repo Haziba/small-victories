@@ -1,0 +1,22 @@
+<%= form_for @command, url: questionnaire_question_index_path(questionnaire_id: @questionnaire.id) do |f| %>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <%= label :question, "Question" %>
+          <%= f.text_field :question, class: 'form-control', required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= label :question_type, "Type" %>
+          <%= f.select :question_type, options_for_select([["Drop down answers", :drop_down_answers], ["Radio list", :radio_list], ["Open answer", :open_answer], ["Scale", :scale]]), class: 'form-control'%>
+        </div>
+
+        <div class="form-group">
+          <%= label :setting_answers, "Set answers (separate by ,)" %>
+          <%= f.text_field :setting_answers %>
+        </div>
+
+        <%= submit_tag("Create", class: "btn btn-primary", data: { disable_with: "Creating..." }) %>
+      </div>
+    </div>
+<% end %>
