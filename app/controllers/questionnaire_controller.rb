@@ -21,5 +21,26 @@ class QuestionnaireController < ApplicationController
 
   def show
     @questionnaire = Questionnaire.find(params[:id])
+
+    @question = @questionnaire.questions.first
+
+    @command = Answer.new(question_id: @question.id, when: Date.today)
+  end
+
+  def answer
+    @command = Answer.new(params[:answer].permit!)
+
+    question = Question.find(@command.question_id)
+
+    if question.common_answers[@command.answer].nil?
+      question.common_answers[@command.answer] = 0
+    end
+
+    question.common_answers[@command.answer] += 1
+
+    @command.save
+    question.save
+
+    redirect_to questionnaire_path(question.questionnaire_id)
   end
 end

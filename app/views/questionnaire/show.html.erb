@@ -1,3 +1,28 @@
 Show page<br />
 
+<%= @question.question %>
+
+<%= form_for @command, url: questionnaire_answer_path(questionnaire_id: @questionnaire.id) do |f| %>
+    <%= f.hidden_field(:question_id) %>
+    <%= f.hidden_field(:when) %>
+
+    <% case @question.question_type.to_sym
+         when :drop_down_answers %>
+        <%= f.text_field(:answer, list: 'drop_down_answers') %>
+        <datalist id="drop_down_answers">
+          <% @question.common_answers.each do |answer| %>
+          <option><%= answer[0] %></option>
+          <% end %>
+        </datalist>
+      <% when :radio_list %>
+        Radio list
+      <% when :open_answer %>
+        Open answer
+      <% when :scale %>
+        Scale
+    <% end %>
+
+    <%= submit_tag("Answer", class: "btn btn-primary", data: { disable_with: "Answering..." }) %>
+<% end %>
+
 <%= link_to "New Question", new_questionnaire_question_path(@questionnaire) %>

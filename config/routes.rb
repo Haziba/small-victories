@@ -3,5 +3,7 @@ Rails.application.routes.draw do
 
   resources :questionnaire do
     resources :question
+
+    post '/answer', to: 'questionnaire#answer', as: :answer
   end
 end
