@@ -6,6 +6,9 @@ Show page<br />
     <%= f.hidden_field(:question_id) %>
     <%= f.hidden_field(:when) %>
 
+    <%= label_tag(:when) %>
+    <%= f.select(:when, options_for_select((-30..30).map{|num| Date.today + num})) %>
+
     <% case @question.question_type.to_sym
          when :drop_down_answers %>
         <%= f.text_field(:answer, list: 'drop_down_answers') %>
