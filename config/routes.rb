@@ -5,5 +5,7 @@ Rails.application.routes.draw do
     resources :question
 
     post '/answer', to: 'questionnaire#answer', as: :answer
+
+    get '/report', to: 'report#show'
   end
 end
