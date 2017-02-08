@@ -8,12 +8,7 @@
 
         <div class="form-group">
           <%= label :question_type, "Type" %>
-          <%= f.select :question_type, options_for_select([["Drop down answers", :drop_down_answers], ["Radio list", :radio_list], ["Open answer", :open_answer], ["Scale", :scale]]), class: 'form-control'%>
-        </div>
-
-        <div class="form-group">
-          <%= label :setting_answers, "Set answers (separate by ,)" %>
-          <%= f.text_field :setting_answers %>
+          <%= f.select :question_type, options_for_select([["Drop down answers", :drop_down_answers], ["Open answer", :open_answer], ["Scale", :scale]]), class: 'form-control'%>
         </div>
 
         <%= submit_tag("Create", class: "btn btn-primary", data: { disable_with: "Creating..." }) %>

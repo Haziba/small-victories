@@ -16,10 +16,6 @@ class QuestionController < ApplicationController
       render :new and return
     end
 
-    if @command.question_type.to_sym == :radio_list
-      @command.common_answers = @command.setting_answers.split(',').map { |answer| [answer, 0] }.to_h
-    end
-
     @command.save
 
     redirect_to questionnaire_path(params[:questionnaire_id])
