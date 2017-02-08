@@ -1,0 +1,43 @@
+<h1><%= @questionnaire.name %></h1>
+
+<table>
+  <thead>
+  <tr>
+    <th><div>Date</div></th>
+    <% @questionnaire.questions.each do |question| %>
+    <th>
+      <div><%= question.question %></div>
+    </th>
+    <% end %>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% (@start_date..@end_date).each do |date| %>
+  <tr>
+    <td><%= date %></td>
+    <% @questionnaire.questions.each do |question|
+      answer = question.answers.select { |a| a.when.to_date == date }.first %>
+    <td class="answer" style="background-color: <%= answer ? answer.colour : "rgb(256,256,256)" %>"></td>
+    <% end %>
+  </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<style>
+  .answer {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #CCC;
+  }
+
+    th {
+      white-space: nowrap;
+    }
+
+    th > div {
+      transform: translate(5px, -9px) rotate(315deg);
+      width: 20px;
+    }
+</style>
