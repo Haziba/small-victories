@@ -11,7 +11,7 @@ Show page<br />
         <%= f.text_field(:answer, list: 'drop_down_answers') %>
         <datalist id="drop_down_answers">
           <% @question.common_answers.each do |answer| %>
-          <option><%= answer[0] %></option>
+          <option data-colour="<%= answer_colour(answer[1][:colour]) %>"><%= answer[0] %></option>
           <% end %>
         </datalist>
       <% when :radio_list %>
@@ -22,7 +22,49 @@ Show page<br />
         Scale
     <% end %>
 
+    Colour?
+    <input name="scale" type="range" value="<%= @last_colour %>" min="0" max="512" />
+    <div id="scale-colour" style="width: 20px; height: 20px; position:relative; background-color: red;"></div>
+    <input type="hidden" name="answer[colour]">
+
     <%= submit_tag("Answer", class: "btn btn-primary", data: { disable_with: "Answering..." }) %>
 <% end %>
 
 <%= link_to "New Question", new_questionnaire_question_path(@questionnaire) %>
+
+<script>
+  var $scale = $("[name=scale]");
+  var $scaleColour = $("#scale-colour");
+  var $colour = $("[name='answer[colour]']");
+  var $answer = $("#answer_answer");
+
+  var updateColour = function(){
+    var red, green;
+    var val = $scale.val();
+
+    if(val <= 256) {
+      red = 256;
+      green = val;
+    }else{
+      red = 512 - val;
+      green = 256;
+    }
+
+    $scaleColour.css('background-color', "rgb(" + red + "," + green + ",0)");
+    $colour.val("rgb(" + red + "," + green + ",0)");
+  };
+
+  $answer.on('input change', function(){
+    var val = $(this).val();
+
+    var $dataList = $("datalist > option").filter(function(){
+      return $(this).text() == val;
+    });
+    $scale.val($dataList.data("colour"));
+    updateColour();
+  });
+
+  $scale.on('input change', updateColour);
+
+  updateColour();
+</script>

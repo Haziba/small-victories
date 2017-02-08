@@ -1,4 +1,6 @@
 class QuestionnaireController < ApplicationController
+  helper_method :answer_colour
+
   def index
     @questionnaires = Questionnaire.all
   end
@@ -24,6 +26,11 @@ class QuestionnaireController < ApplicationController
 
     @question = @questionnaire.questions.first
 
+    colours = @question.last_colour.slice(/[0-9,]+/).split(',').map(&:to_i)
+    @last_colour = colours[0] == 0 ? 256 + colours[1] : 256 - colours[0]
+    #render text: @question.last_colour and return
+    #render text: @last_colour and return
+
     @command = Answer.new(question_id: @question.id, when: Date.today)
   end
 
@@ -33,14 +40,24 @@ class QuestionnaireController < ApplicationController
     question = Question.find(@command.question_id)
 
     if question.common_answers[@command.answer].nil?
-      question.common_answers[@command.answer] = 0
+      question.common_answers[@command.answer] = {
+          frequency: 0,
+          colour: ""
+      }
     end
 
-    question.common_answers[@command.answer] += 1
+    question.common_answers[@command.answer][:frequency] += 1
+    question.common_answers[@command.answer][:colour] = @command.colour
 
     @command.save
     question.save
 
     redirect_to questionnaire_path(question.questionnaire_id)
+  end
+
+  def answer_colour(colour)
+    split = colour.slice(/[0-9,]+/).split(',').map(&:to_i)
+
+    split[0] == 0 ? 256 + split[1] : 256 - split[0]
   end
 end
